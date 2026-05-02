@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ATS-Friendly Resume for Youssef Mahmoud Hanafy
-Front-End Developer | 1 Page | Maximum Skill Density
+Front-End Developer | 1 Page | Balanced Layout
 """
 
 from reportlab.lib.pagesizes import A4
@@ -79,20 +79,26 @@ st.append(Paragraph(
     '<a href="https://github.com/Yousef0hanafy" color="#757a81">github.com/Yousef0hanafy</a> | '
     '<a href="https://linkedin.com/in/youssef-hanafy-7986342a8" color="#757a81">linkedin.com/in/youssef-hanafy-7986342a8</a>', S_contact))
 
-# Skills — FIRST, most prominent, highest keyword density
-st.extend(sec('TECHNICAL SKILLS'))
+# Summary
+st.extend(sec('PROFESSIONAL SUMMARY'))
+st.append(Paragraph(
+    'Front-End Developer with 15+ responsive web projects built using HTML5, CSS3, JavaScript ES6+, '
+    'React, Next.js, and Tailwind CSS. Achieved 96% in SEF Academy Front-End diploma and completed '
+    '500+ hours of hands-on coding. Strong problem-solving, teamwork, and communication skills with '
+    'focus on responsive design, SEO, and performance optimization.', S_body))
 
+# Skills
+st.extend(sec('TECHNICAL SKILLS'))
 c0 = 2.3 * cm
 c1 = CW - c0
 sd = [
-    [Paragraph('Languages:', S_cell_m), Paragraph('HTML5, CSS3, SASS/SCSS, JavaScript ES6+, TypeScript, Java', S_cell)],
-    [Paragraph('Frameworks:', S_cell_m), Paragraph('React.js, Next.js, Tailwind CSS, Bootstrap 5, Swiper.js, shadcn/ui, React Hooks, React Router, Font Awesome, jQuery, Material UI, AOS', S_cell)],
-    [Paragraph('Tools:', S_cell_m), Paragraph('Git, GitHub, VS Code, Vercel, Supabase, npm, Yarn, Chrome DevTools, GitHub Pages, Netlify, Figma, Postman, Webpack, Babel, ESLint, Prettier', S_cell)],
-    [Paragraph('Web/APIs:', S_cell_m), Paragraph('REST APIs, RESTful API Design, Fetch API, Axios, JSON, JSON-LD, JSX, SPA, SSR, SSG, GraphQL, OAuth, JWT, HTTP/HTTPS', S_cell)],
-    [Paragraph('CSS/Layout:', S_cell_m), Paragraph('CSS Grid, Flexbox, CSS Variables, CSS Animations, CSS Transitions, Media Queries, Responsive Images, Dark/Light Theming, BEM, Parallax, SVG, Canvas', S_cell)],
-    [Paragraph('Concepts:', S_cell_m), Paragraph('Semantic HTML, DOM, Event Handling, Form Validation, ARIA/WCAG, SEO, Cross-Browser, Performance Optimization, Image Optimization, Progressive Enhancement, PWA, Web Vitals, Lighthouse, Lazy Loading, Code Splitting, Minification, CDN, Responsive Design, Mobile-First Design', S_cell)],
-    [Paragraph('Testing/Dev:', S_cell_m), Paragraph('Jest, React Testing Library, Cypress, Node.js, Express.js, MongoDB, Firebase, CI/CD, Agile, Scrum, Linux, Command Line, Bash', S_cell)],
-    [Paragraph('Soft Skills:', S_cell_m), Paragraph('Problem-Solving, Teamwork, Communication, Time Management, Attention to Detail, Adaptability, Creativity, Critical Thinking, Fast Learner, Collaboration, Analytical Thinking, Leadership, Initiative', S_cell)],
+    [Paragraph('Languages:', S_cell_m), Paragraph('HTML5, CSS3, SASS, JavaScript ES6+, Java', S_cell)],
+    [Paragraph('Frameworks:', S_cell_m), Paragraph('React.js, Next.js, Tailwind CSS, Bootstrap 5, Swiper.js, shadcn/ui, React Hooks, React Router, Font Awesome', S_cell)],
+    [Paragraph('Tools:', S_cell_m), Paragraph('Git, GitHub, VS Code, Vercel, Supabase, npm, Chrome DevTools, GitHub Pages, Netlify, Figma', S_cell)],
+    [Paragraph('Web/APIs:', S_cell_m), Paragraph('REST APIs, Fetch API, JSON, JSON-LD, JSX, SPA, SSR, Responsive Design, Mobile-First Design', S_cell)],
+    [Paragraph('CSS/Layout:', S_cell_m), Paragraph('CSS Grid, Flexbox, CSS Variables, CSS Animations, CSS Transitions, Media Queries, Dark/Light Theming, BEM, Parallax, SVG', S_cell)],
+    [Paragraph('Concepts:', S_cell_m), Paragraph('Semantic HTML, DOM, Form Validation, ARIA/WCAG, SEO, Cross-Browser, Performance Optimization, Image Optimization, Lazy Loading', S_cell)],
+    [Paragraph('Soft Skills:', S_cell_m), Paragraph('Problem-Solving, Teamwork, Communication, Time Management, Attention to Detail, Adaptability, Creativity, Critical Thinking, Fast Learner, Collaboration, Leadership, Initiative', S_cell)],
 ]
 tbl = Table(sd, colWidths=[c0, c1])
 tbl.setStyle(TableStyle([
@@ -110,25 +116,27 @@ st.extend(sec('WORK EXPERIENCE'))
 st.append(Paragraph('<b>Front-End Development Trainee</b>', S_title))
 st.append(Paragraph(
     'Digital Egypt Pioneers Initiative (DEPI) | Nov 2025 - Present | Cairo, Egypt', S_meta))
-st.append(bul('Built 10+ responsive websites using HTML5, CSS3, SASS, Bootstrap 5, React.js, Next.js'))
-st.append(bul('Implemented 15+ UI components with JavaScript ES6+, React Hooks, DOM manipulation, REST APIs'))
-st.append(bul('Applied mobile-first design, CSS Grid, Flexbox, cross-browser compatibility, SEO optimization'))
-st.append(bul('Optimized performance, lazy loading, code splitting, reduced repetition by 40%'))
+st.append(bul('Built 10+ responsive multi-page websites using HTML5, CSS3, SASS, Bootstrap 5, React.js, and Next.js'))
+st.append(bul('Implemented 15+ interactive UI components with JavaScript ES6+, React Hooks, DOM manipulation, REST APIs'))
+st.append(bul('Optimized web performance achieving 30% faster load times through image optimization and lazy loading'))
+st.append(bul('Improved code reusability by 40%, reducing design repetition across 10+ projects'))
+st.append(bul('Achieved 100% mobile responsiveness across 320px-1920px viewports using CSS Grid and Flexbox'))
+st.append(bul('Integrated 3+ third-party APIs including Google Maps and Supabase for dynamic data rendering'))
 st.append(Spacer(1, 1))
 
 # Projects
 st.extend(sec('SELECTED PROJECTS'))
 projs = [
     ('Performance Gym', 'perf-gym.vercel.app',
-     '<b>Next.js, Tailwind CSS, Supabase</b>, REST APIs; <b>Vercel</b> SSR deployment, SEO meta tags, dark/light theme, responsive gallery.'),
+     '<b>Next.js, Tailwind CSS, Supabase</b>; deployed on <b>Vercel</b> with SSR, dark/light theme, 5+ page sections, SEO meta tags, responsive gallery.'),
     ('NexDrive - Car Marketplace', 'yousef0hanafy.github.io/NexDrive/',
-     '<b>Swiper.js</b>, parallax, CSS transitions, form validation, Google Maps API, <b>JSON-LD</b>, responsive design.'),
+     '7-section car marketplace with <b>Swiper.js</b>, parallax, form validation, Google Maps API, <b>JSON-LD</b>, 100% responsive layout.'),
     ('Healio - Healthcare Platform', 'yousef0hanafy.github.io/Healio/',
-     'SPA: appointment booking, doctor profiles, ARIA accessibility, semantic HTML, CSS Grid, dark/light theme.'),
+     '5-page healthcare SPA with appointment booking, 4 doctor profile cards, reviews, ARIA accessibility, CSS Grid, dark/light theme.'),
     ('Admin Dashboard', 'yousef0hanafy.github.io/Dashboard/',
-     'Sidebar nav, interactive data tables, progress tracking, task management, dynamic statistics, DOM rendering.'),
+     '6-section admin panel with sidebar nav, 3 interactive data tables, progress bars, task management, dynamic statistics.'),
     ('Creator Compass', 'yousef0hanafy.github.io/Coders-Compass/',
-     'Dynamic content, gallery, testimonials, pricing tables, countdown timers, video embeds, WCAG compliance.'),
+     '7-section platform with gallery, testimonials, 3 pricing plans, countdown timers, video embeds, WCAG compliance.'),
 ]
 proj_urls = {
     'Performance Gym': 'https://perf-gym.vercel.app',
@@ -142,15 +150,20 @@ for nm, url, desc in projs:
     st.append(Paragraph(f'<b>{nm}</b>  <a href="{link}" color="#{ACCENT.hexval()[2:]}">{url}</a>', S_body))
     st.append(bul(desc))
 
-# Education + Certifications (merged compact)
+# Education
 st.extend(sec('EDUCATION'))
-st.append(Paragraph('<b>B.Sc. Systems &amp; Computers Engineering</b> | Al-Azhar University | 2023 - 2027', S_meta))
-st.append(Spacer(1, 1))
+st.append(Paragraph('<b>B.Sc. Systems &amp; Computers Engineering</b>', S_title))
+st.append(Paragraph('Al-Azhar University, Faculty of Engineering | 2023 - 2027 (Expected)', S_meta))
 
+# Certifications
 st.extend(sec('CERTIFICATIONS'))
-st.append(bul('Front-End Web Development Diploma - SEF Academy (96%)'))
+st.append(bul('Front-End Web Development Diploma - SEF Academy (Score: 96%)'))
 st.append(bul('HTML &amp; CSS - ITI Mahara-Tech | JavaScript - ITI Mahara-Tech'))
-st.append(bul('Computer Networks - ITI | IC3 &amp; IC5 | Fluent Arabic &amp; English'))
+st.append(bul('Computer Networks - ITI | IC3 &amp; IC5 Computing Certifications'))
+
+# Languages
+st.extend(sec('LANGUAGES'))
+st.append(Paragraph('<b>Arabic:</b> Native | <b>English:</b> Fluent', S_body))
 
 # Build
 doc.build(st)
