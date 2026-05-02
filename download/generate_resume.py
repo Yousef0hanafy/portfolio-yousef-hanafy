@@ -12,6 +12,8 @@ from reportlab.lib import colors
 from reportlab.platypus import (
     SimpleDocTemplate, Paragraph, Spacer, HRFlowable, Table, TableStyle
 )
+from reportlab.platypus.flowables import Flowable
+from reportlab.lib.colors import HexColor
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase.pdfmetrics import registerFontFamily
@@ -74,15 +76,18 @@ st.append(Paragraph('YOUSSEF MAHMOUD HANAFY', S_name))
 st.append(Paragraph(
     'Cairo, Egypt | +20 110 047 6722 | youssefhanafy325@gmail.com', S_contact))
 st.append(Paragraph(
-    'github.com/Yousef0hanafy | linkedin.com/in/youssef-hanafy-7986342a8', S_contact))
+    '<a href="https://github.com/Yousef0hanafy" color="#757a81">github.com/Yousef0hanafy</a> | '
+    '<a href="https://linkedin.com/in/youssef-hanafy-7986342a8" color="#757a81">linkedin.com/in/youssef-hanafy-7986342a8</a>', S_contact))
 
 # Summary
 st.extend(sec('PROFESSIONAL SUMMARY'))
 st.append(Paragraph(
-    'Front-End Developer and Computer Systems Engineering student with hands-on experience '
-    'building 15+ responsive, user-focused web applications using HTML, CSS, JavaScript, '
-    'React, and Next.js. Skilled in modern UI development, responsive design, SEO optimization, '
-    'and cross-browser compatibility. Seeking a Front-End Developer role to contribute to '
+    'Detail-oriented and self-motivated Front-End Developer and Computer Systems Engineering student '
+    'with hands-on experience building 15+ responsive, user-focused web applications using HTML, CSS, '
+    'JavaScript, React, and Next.js. Strong problem-solving and teamwork skills developed through '
+    'collaborative training and independent projects. Skilled in modern UI development, responsive design, '
+    'SEO optimization, and cross-browser compatibility. Adaptable fast learner with creative thinking '
+    'and effective communication skills. Seeking a Front-End Developer role to contribute to '
     'high-quality web solutions.', S_body))
 
 # Skills
@@ -100,6 +105,10 @@ sd = [
         'Responsive/Mobile-First Design, Semantic HTML, SEO, DOM Manipulation, '
         'CSS Grid/Flexbox, Dark/Light Theming, Form Validation, Accessibility (ARIA), '
         'JSON-LD, CSS Animations, Image Optimization, Parallax Effects', S_cell)],
+    [Paragraph('Soft Skills:', S_cell_m), Paragraph(
+        'Problem-Solving, Teamwork, Communication, Time Management, Attention to Detail, '
+        'Adaptability, Creativity, Critical Thinking, Self-Motivated, Fast Learner, '
+        'Collaboration, Analytical Thinking, Leadership, Initiative', S_cell)],
 ]
 tbl = Table(sd, colWidths=[c0, c1])
 tbl.setStyle(TableStyle([
@@ -137,8 +146,16 @@ projs = [
     ('Creator Compass', 'yousef0hanafy.github.io/Coders-Compass/',
      'Freelance platform with articles, gallery, testimonials, pricing plans, countdown timers, video masterclasses, and ARIA accessibility.'),
 ]
+proj_urls = {
+    'Performance Gym': 'https://perf-gym.vercel.app',
+    'NexDrive - Car Marketplace': 'https://yousef0hanafy.github.io/NexDrive/',
+    'Healio - Healthcare Platform': 'https://yousef0hanafy.github.io/Healio/',
+    'Admin Dashboard': 'https://yousef0hanafy.github.io/Dashboard/',
+    'Creator Compass': 'https://yousef0hanafy.github.io/Coders-Compass/',
+}
 for nm, url, desc in projs:
-    st.append(Paragraph(f'<b>{nm}</b>  <font color="#{ACCENT.hexval()[2:]}">{url}</font>', S_body))
+    link = proj_urls.get(nm, 'https://' + url)
+    st.append(Paragraph(f'<b>{nm}</b>  <a href="{link}" color="#{ACCENT.hexval()[2:]}">{url}</a>', S_body))
     st.append(bul(desc))
 
 # Education
