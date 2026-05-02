@@ -29,14 +29,14 @@ TEXT = colors.HexColor('#1f2123')
 MUTED = colors.HexColor('#757a81')
 
 # ── Document ──
-M = 1.5 * cm
+M = 1.4 * cm
 OUT = '/home/z/my-project/download/Youssef_Hanafy_Resume.pdf'
 CW = A4[0] - 2 * M  # content width
 
 doc = SimpleDocTemplate(
     OUT, pagesize=A4,
     leftMargin=M, rightMargin=M,
-    topMargin=1.2*cm, bottom=1.0*cm,
+    topMargin=1.0*cm, bottom=0.8*cm,
     title='Resume - Youssef Mahmoud Hanafy',
     author='Youssef Mahmoud Hanafy', creator='Z.ai'
 )
@@ -44,17 +44,17 @@ doc = SimpleDocTemplate(
 # ── Styles (9pt min, tight leading) ──
 S_name = ParagraphStyle('n', fontName='TNR-B', fontSize=20, leading=24,
                          alignment=TA_CENTER, spaceAfter=1, textColor=TEXT)
-S_contact = ParagraphStyle('c', fontName='TNR', fontSize=8.5, leading=11,
-                           alignment=TA_CENTER, textColor=MUTED, spaceAfter=4)
-S_sec = ParagraphStyle('s', fontName='TNR-B', fontSize=10.5, leading=13,
-                        spaceBefore=6, spaceAfter=1, textColor=ACCENT)
-S_title = ParagraphStyle('t', fontName='TNR-B', fontSize=9.5, leading=12,
+S_contact = ParagraphStyle('c', fontName='TNR', fontSize=8, leading=10,
+                           alignment=TA_CENTER, textColor=MUTED, spaceAfter=3)
+S_sec = ParagraphStyle('s', fontName='TNR-B', fontSize=10, leading=12,
+                        spaceBefore=4, spaceAfter=1, textColor=ACCENT)
+S_title = ParagraphStyle('t', fontName='TNR-B', fontSize=9, leading=11,
                           spaceAfter=0, textColor=TEXT)
-S_meta = ParagraphStyle('m', fontName='TNR', fontSize=8.5, leading=11,
-                         textColor=MUTED, spaceAfter=2)
-S_body = ParagraphStyle('b', fontName='TNR', fontSize=9, leading=12,
-                         spaceAfter=2, textColor=TEXT, rightIndent=6)
-S_bul = ParagraphStyle('bl', fontName='TNR', fontSize=9, leading=12,
+S_meta = ParagraphStyle('m', fontName='TNR', fontSize=8, leading=10,
+                         textColor=MUTED, spaceAfter=1)
+S_body = ParagraphStyle('b', fontName='TNR', fontSize=8.5, leading=11,
+                         spaceAfter=1, textColor=TEXT, rightIndent=6)
+S_bul = ParagraphStyle('bl', fontName='TNR', fontSize=8.5, leading=11,
                         leftIndent=12, bulletIndent=0,
                         spaceBefore=0, spaceAfter=0, textColor=TEXT,
                         rightIndent=6)
@@ -62,8 +62,8 @@ S_bul = ParagraphStyle('bl', fontName='TNR', fontSize=9, leading=12,
 # ── Helpers ──
 def sec(title):
     return [Paragraph(title, S_sec),
-            HRFlowable(width='100%', thickness=0.5, color=ACCENT,
-                       spaceBefore=0, spaceAfter=3)]
+            HRFlowable(width='100%', thickness=0.4, color=ACCENT,
+                       spaceBefore=0, spaceAfter=2)]
 
 def bul(t):
     return Paragraph('- ' + t, S_bul)
@@ -83,32 +83,28 @@ st.append(Paragraph(
 st.extend(sec('PROFESSIONAL SUMMARY'))
 st.append(Paragraph(
     'Detail-oriented and self-motivated Front-End Developer and Computer Systems Engineering student '
-    'with hands-on experience building 15+ responsive, user-focused web applications using HTML, CSS, '
-    'JavaScript, React, and Next.js. Strong problem-solving and teamwork skills developed through '
-    'collaborative training and independent projects. Skilled in modern UI development, responsive design, '
-    'SEO optimization, and cross-browser compatibility. Adaptable fast learner with creative thinking '
+    'with hands-on experience building 15+ responsive, user-focused web applications using HTML5, CSS3, '
+    'JavaScript ES6+, React, and Next.js. Strong problem-solving and teamwork skills developed through '
+    'collaborative training and independent projects. Skilled in modern UI/UX development, responsive design, '
+    'SEO optimization, REST APIs, and cross-browser compatibility. Adaptable fast learner with creative thinking '
     'and effective communication skills. Seeking a Front-End Developer role to contribute to '
     'high-quality web solutions.', S_body))
 
 # Skills
 st.extend(sec('TECHNICAL SKILLS'))
-S_cell = ParagraphStyle('cl', fontName='TNR', fontSize=8.5, leading=11, textColor=TEXT)
-S_cell_m = ParagraphStyle('clm', fontName='TNR', fontSize=8.5, leading=11, textColor=MUTED)
+S_cell = ParagraphStyle('cl', fontName='TNR', fontSize=8, leading=10, textColor=TEXT)
+S_cell_m = ParagraphStyle('clm', fontName='TNR', fontSize=8, leading=10, textColor=MUTED)
 
 c0 = 2.3 * cm
 c1 = CW - c0
 sd = [
-    [Paragraph('Languages:', S_cell_m), Paragraph('HTML5, CSS3, JavaScript (ES6+), Java', S_cell)],
-    [Paragraph('Frameworks:', S_cell_m), Paragraph('React, Next.js, Tailwind CSS, Bootstrap, Swiper.js, shadcn/ui', S_cell)],
-    [Paragraph('Tools:', S_cell_m), Paragraph('Git/GitHub, VS Code, Vercel, Supabase, npm, Chrome DevTools', S_cell)],
-    [Paragraph('Concepts:', S_cell_m), Paragraph(
-        'Responsive/Mobile-First Design, Semantic HTML, SEO, DOM Manipulation, '
-        'CSS Grid/Flexbox, Dark/Light Theming, Form Validation, Accessibility (ARIA), '
-        'JSON-LD, CSS Animations, Image Optimization, Parallax Effects', S_cell)],
-    [Paragraph('Soft Skills:', S_cell_m), Paragraph(
-        'Problem-Solving, Teamwork, Communication, Time Management, Attention to Detail, '
-        'Adaptability, Creativity, Critical Thinking, Self-Motivated, Fast Learner, '
-        'Collaboration, Analytical Thinking, Leadership, Initiative', S_cell)],
+    [Paragraph('Languages:', S_cell_m), Paragraph('HTML5, CSS3, SASS, JavaScript ES6+, TypeScript, Java', S_cell)],
+    [Paragraph('Frameworks:', S_cell_m), Paragraph('React.js, Next.js, Tailwind CSS, Bootstrap 5, Swiper.js, shadcn/ui, React Hooks, React Router, Font Awesome', S_cell)],
+    [Paragraph('Tools:', S_cell_m), Paragraph('Git, GitHub, VS Code, Vercel, Supabase, npm, Chrome DevTools, GitHub Pages, Netlify, Figma', S_cell)],
+    [Paragraph('Web/APIs:', S_cell_m), Paragraph('REST APIs, Fetch API, JSON, JSX, SPA, SSR, Responsive Design, Mobile-First Design, Progressive Enhancement', S_cell)],
+    [Paragraph('CSS/Layout:', S_cell_m), Paragraph('CSS Grid, Flexbox, CSS Variables, CSS Animations, CSS Transitions, Media Queries, Dark/Light Theming, BEM, Parallax', S_cell)],
+    [Paragraph('Concepts:', S_cell_m), Paragraph('Semantic HTML, DOM, Event Handling, Form Validation, ARIA/WCAG, SEO, Cross-Browser, Performance Optimization, JSON-LD', S_cell)],
+    [Paragraph('Soft Skills:', S_cell_m), Paragraph('Problem-Solving, Teamwork, Communication, Time Management, Attention to Detail, Adaptability, Creativity, Critical Thinking, Fast Learner, Collaboration, Analytical Thinking, Leadership, Initiative', S_cell)],
 ]
 tbl = Table(sd, colWidths=[c0, c1])
 tbl.setStyle(TableStyle([
@@ -126,25 +122,26 @@ st.extend(sec('WORK EXPERIENCE'))
 st.append(Paragraph('<b>Front-End Development Trainee</b>', S_title))
 st.append(Paragraph(
     'Digital Egypt Pioneers Initiative (DEPI) | Nov 2025 - Present | Cairo, Egypt', S_meta))
-st.append(bul('Built 10+ responsive multi-page websites using HTML5, CSS3, Bootstrap, and React'))
-st.append(bul('Implemented 15+ interactive UI features using JavaScript (DOM manipulation, modals, sliders)'))
-st.append(bul('Applied mobile-first design and ensured cross-browser compatibility across all devices'))
-st.append(bul('Improved code reusability, reducing design repetition by 40%'))
-st.append(Spacer(1, 2))
+st.append(bul('Built 10+ responsive multi-page websites using HTML5, CSS3, SASS, Bootstrap 5, and React.js'))
+st.append(bul('Implemented 15+ interactive UI components using JavaScript ES6+, React Hooks, and DOM manipulation'))
+st.append(bul('Developed REST API integrations, dynamic data rendering, and form validation workflows'))
+st.append(bul('Applied mobile-first responsive design, CSS Grid, Flexbox, and cross-browser compatibility'))
+st.append(bul('Optimized web performance and reduced design repetition by 40%'))
+st.append(Spacer(1, 1))
 
 # Projects
 st.extend(sec('SELECTED PROJECTS'))
 projs = [
     ('Performance Gym', 'perf-gym.vercel.app',
-     'Full-featured gym website with <b>Next.js, Tailwind CSS, Supabase</b>; deployed on <b>Vercel</b> with dark/light theme, responsive gallery, and SEO.'),
+     'Full-stack gym website with <b>Next.js, Tailwind CSS, Supabase</b>, REST APIs; <b>Vercel</b> deployed with SSR, dark/light theme, SEO meta tags, responsive gallery.'),
     ('NexDrive - Car Marketplace', 'yousef0hanafy.github.io/NexDrive/',
-     'Car marketplace with <b>Swiper.js</b> sliders, parallax scrolling, theme toggle, form validation, Google Maps, and <b>JSON-LD</b> structured data.'),
+     'Responsive car marketplace with <b>Swiper.js</b>, parallax scrolling, CSS transitions, form validation, Google Maps API, <b>JSON-LD</b> structured data.'),
     ('Healio - Healthcare Platform', 'yousef0hanafy.github.io/Healio/',
-     'Healthcare site with appointment booking, doctor profiles, reviews, blog, dark/light theme, and responsive layout.'),
+     'Healthcare SPA with appointment booking, doctor profiles, reviews, blog, ARIA accessibility, semantic HTML, CSS Grid layout.'),
     ('Admin Dashboard', 'yousef0hanafy.github.io/Dashboard/',
-     'Multi-page admin panel with sidebar nav, data tables, progress tracking, task management, and statistics dashboard.'),
+     'Admin dashboard with sidebar nav, interactive data tables, progress tracking, task management, and dynamic statistics.'),
     ('Creator Compass', 'yousef0hanafy.github.io/Coders-Compass/',
-     'Freelance platform with articles, gallery, testimonials, pricing plans, countdown timers, video masterclasses, and ARIA accessibility.'),
+     'Freelancer platform with dynamic content, gallery, testimonials, pricing tables, countdown timers, video embeds, WCAG compliance.'),
 ]
 proj_urls = {
     'Performance Gym': 'https://perf-gym.vercel.app',
