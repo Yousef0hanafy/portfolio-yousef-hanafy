@@ -96,3 +96,46 @@ Stage Summary:
 - All 8 sections fully functional and responsive
 - Dark/light theme toggle working
 - Clean code, no lint errors
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Add project category filter to portfolio
+
+Work Log:
+- Added `category` field (String, default "mini-frontend") to Project model in Prisma schema
+- Pushed schema to SQLite database with db:push
+- Updated seed data with categories for all 6 projects:
+  - Performance Gym → "fullstack"
+  - NexDrive Car Marketplace → "big-frontend"
+  - Healio Healthcare Platform → "big-frontend"
+  - Admin Dashboard → "big-frontend"
+  - Creator Compass → "big-frontend"
+  - Flyora → "mini-frontend"
+- Re-seeded database successfully
+- Updated GET /api/projects to support optional `?category=` query parameter filtering
+- Updated POST /api/projects to accept `category` field with default "mini-frontend"
+- Replaced tech-based filters in ProjectsSection with 4 category filter buttons:
+  - All (6), Fullstack (1), Big Frontend (4), Mini Frontend (1)
+  - Pill/chip style with purple accent (#4b2bab) for active state
+  - Count badges on each filter button
+  - Client-side filtering with smooth transitions
+- Added category badges on project cards:
+  - fullstack → purple badge
+  - big-frontend → blue badge
+  - mini-frontend → green badge
+  - Position: top-left of card image area
+- Updated Project interface in page.tsx to include `category` field
+- Updated admin panel:
+  - Added "Category" column to projects table with formatted badge
+  - Added shadcn/ui Select dropdown in Add/Edit project dialog with 3 options
+  - Default category set to "mini-frontend" for new projects
+- Passed ESLint with zero errors
+
+Stage Summary:
+- Project category filtering fully functional with 4 filter buttons and count badges
+- Color-coded category badges on each project card (purple/blue/green)
+- Admin panel supports category management via dropdown in Add/Edit forms
+- API supports optional category query parameter for server-side filtering
+- Database schema and seed data updated and pushed successfully
+- Clean code, no lint errors

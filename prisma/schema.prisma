@@ -31,6 +31,7 @@ model Project {
   githubUrl String   @default("")
   imageUrl  String   @default("")
   techStack String   @default("")
+  category  String   @default("mini-frontend")
   featured  Boolean  @default(false)
   order     Int      @default(0)
   createdAt DateTime @default(now())

@@ -42,6 +42,7 @@ interface Project {
   githubUrl: string
   imageUrl: string
   techStack: string
+  category: string
   featured: boolean
   order: number
 }

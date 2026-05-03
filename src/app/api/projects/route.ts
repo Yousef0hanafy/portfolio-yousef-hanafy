@@ -1,9 +1,17 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const projects = await db.project.findMany({ orderBy: { order: 'asc' } })
+    const { searchParams } = new URL(request.url)
+    const category = searchParams.get('category')
+
+    const where = category ? { category } : {}
+
+    const projects = await db.project.findMany({
+      where,
+      orderBy: { order: 'asc' },
+    })
     return NextResponse.json(projects)
   } catch {
     return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 })
@@ -13,7 +21,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { title, description, liveUrl, githubUrl, imageUrl, techStack, featured, order } = body
+    const { title, description, liveUrl, githubUrl, imageUrl, techStack, category, featured, order } = body
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -27,6 +35,7 @@ export async function POST(request: Request) {
         githubUrl: githubUrl ?? '',
         imageUrl: imageUrl ?? '',
         techStack: techStack ?? '',
+        category: category ?? 'mini-frontend',
         featured: featured ?? false,
         order: order ?? 0,
       },

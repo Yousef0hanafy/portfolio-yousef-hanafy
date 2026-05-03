@@ -32,11 +32,12 @@ import {
   LogOut,
   Loader2,
 } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 // Types
 interface SiteInfo { key: string; value: string }
 interface Skill { id: string; name: string; category: string; level: number; order: number }
-interface Project { id: string; title: string; description: string; liveUrl: string; githubUrl: string; imageUrl: string; techStack: string; featured: boolean; order: number }
+interface Project { id: string; title: string; description: string; liveUrl: string; githubUrl: string; imageUrl: string; techStack: string; category: string; featured: boolean; order: number }
 interface Experience { id: string; role: string; company: string; startDate: string; endDate: string; description: string; current: boolean; order: number }
 interface Certification { id: string; title: string; issuer: string; date: string; score: string; order: number }
 interface Recommendation { id: string; name: string; role: string; company: string; text: string; avatarUrl: string; order: number }
@@ -435,6 +436,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
                       <TableHeader>
                         <TableRow>
                           <TableHead>Title</TableHead>
+                          <TableHead className="hidden sm:table-cell">Category</TableHead>
                           <TableHead className="hidden sm:table-cell">Tech Stack</TableHead>
                           <TableHead className="hidden md:table-cell">Featured</TableHead>
                           <TableHead className="text-right">Actions</TableHead>
@@ -445,8 +447,11 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
                           <TableRow key={project.id}>
                             <TableCell className="font-medium">{project.title}</TableCell>
                             <TableCell className="hidden sm:table-cell">
+                              <Badge variant="outline" className="text-xs capitalize">{project.category?.replace('-', ' ') || 'mini-frontend'}</Badge>
+                            </TableCell>
+                            <TableCell className="hidden sm:table-cell">
                               <div className="flex flex-wrap gap-1">
-                                {project.techStack.split(',').slice(0, 3).map((t) => (
+                                {project.techStack.split(',').slice(0, 2).map((t) => (
                                   <Badge key={t.trim()} variant="outline" className="text-xs">{t.trim()}</Badge>
                                 ))}
                               </div>
@@ -656,7 +661,7 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
   const getDefaultForm = (t: string) => {
     switch (t) {
       case 'skills': return { name: '', category: 'Languages', level: 80, order: 0 }
-      case 'projects': return { title: '', description: '', liveUrl: '', githubUrl: '', imageUrl: '', techStack: '', featured: false, order: 0 }
+      case 'projects': return { title: '', description: '', liveUrl: '', githubUrl: '', imageUrl: '', techStack: '', category: 'mini-frontend', featured: false, order: 0 }
       case 'experience': return { role: '', company: '', startDate: '', endDate: '', description: '', current: false, order: 0 }
       case 'certifications': return { title: '', issuer: '', date: '', score: '', order: 0 }
       case 'recommendations': return { name: '', role: '', company: '', text: '', avatarUrl: '', order: 0 }
@@ -750,6 +755,19 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
                   <Label>GitHub URL</Label>
                   <Input value={form.githubUrl || ''} onChange={(e) => updateField('githubUrl', e.target.value)} />
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Category</Label>
+                <Select value={form.category || 'mini-frontend'} onValueChange={(v) => updateField('category', v)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="fullstack">Fullstack</SelectItem>
+                    <SelectItem value="big-frontend">Big Frontend</SelectItem>
+                    <SelectItem value="mini-frontend">Mini Frontend</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label>Tech Stack (comma separated)</Label>
