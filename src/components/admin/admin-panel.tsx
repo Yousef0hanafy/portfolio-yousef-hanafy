@@ -12,7 +12,6 @@ import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { useToast } from '@/hooks/use-toast'
 import {
   X,
@@ -214,7 +213,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
             Admin Panel
           </h1>
         </div>
-        <ScrollArea className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           <div className="p-4 space-y-1">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -238,7 +237,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
               </button>
             ))}
           </div>
-        </ScrollArea>
+        </div>
         <div className="p-4 border-t border-border">
           <Button variant="outline" onClick={handleLogout} className="w-full">
             <LogOut className="h-4 w-4 mr-2" />
@@ -273,7 +272,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
           </Button>
         </div>
 
-        <ScrollArea className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           <div className="p-4 sm:p-6">
             <Tabs defaultValue="dashboard" className="space-y-6">
               <TabsList className="w-full flex md:hidden">
@@ -603,7 +602,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
               </TabsContent>
             </Tabs>
           </div>
-        </ScrollArea>
+        </div>
       </div>
 
       {/* Edit/Add Dialog */}
