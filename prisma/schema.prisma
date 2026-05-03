@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model SiteInfo {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  category  String
+  level     Int
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  title     String
+  description String
+  liveUrl   String   @default("")
+  githubUrl String   @default("")
+  imageUrl  String   @default("")
+  techStack String   @default("")
+  featured  Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  role        String
+  company     String
+  startDate   String
+  endDate     String   @default("")
+  description String
+  current     Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Certification {
+  id        String   @id @default(cuid())
+  title     String
+  issuer    String
+  date      String
+  score     String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recommendation {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  company   String
+  text      String
+  avatarUrl String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
