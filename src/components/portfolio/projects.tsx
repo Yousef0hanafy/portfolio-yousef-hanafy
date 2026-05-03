@@ -115,11 +115,22 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                 className="group section-reveal overflow-hidden border-primary/10 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                 style={{ transitionDelay: `${idx * 0.1}s` }}
               >
-                {/* Project image placeholder */}
-                <div className="h-44 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center relative overflow-hidden">
-                  <div className="text-primary/20 text-6xl font-bold">
-                    {project.title.charAt(0)}
-                  </div>
+                {/* Project image */}
+                <div className="h-44 bg-muted relative overflow-hidden">
+                  {project.imageUrl ? (
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+                      <div className="text-primary/20 text-6xl font-bold">
+                        {project.title.charAt(0)}
+                      </div>
+                    </div>
+                  )}
                   <div className="absolute top-3 left-3">
                     <span className={`inline-flex items-center text-[10px] font-semibold px-2 py-0.5 rounded-full ${catConfig?.color || 'bg-muted text-muted-foreground'}`}>
                       {catConfig?.label || project.category}
