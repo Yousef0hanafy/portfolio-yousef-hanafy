@@ -7,7 +7,6 @@ import {
   Code2,
   Wrench,
   Layers,
-  Lightbulb,
 } from 'lucide-react'
 
 interface Skill {
@@ -22,20 +21,18 @@ interface SkillsSectionProps {
   skills: Skill[]
 }
 
-const hiddenCategories = ['Web & APIs', 'Soft Skills', 'CSS & Layout']
+const hiddenCategories = ['Web & APIs', 'Soft Skills', 'CSS & Layout', 'Concepts']
 
 const categoryIcons: Record<string, React.ElementType> = {
   'Languages': Code2,
   'Frameworks': Layers,
   'Tools': Wrench,
-  'Concepts': Lightbulb,
 }
 
 const categoryColors: Record<string, string> = {
   'Languages': 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
   'Frameworks': 'bg-green-500/10 text-green-600 dark:text-green-400',
   'Tools': 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-  'Concepts': 'bg-teal-500/10 text-teal-600 dark:text-teal-400',
 }
 
 export function SkillsSection({ skills }: SkillsSectionProps) {
@@ -64,7 +61,8 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
       return acc
     }, {})
 
-  const categories = Object.keys(grouped).sort()
+  const categoryOrder = ['Languages', 'Frameworks', 'Tools']
+  const categories = categoryOrder.filter((cat) => grouped[cat])
 
   return (
     <section id="skills" className="py-20 sm:py-28 px-4 sm:px-6 bg-accent/30" ref={sectionRef}>

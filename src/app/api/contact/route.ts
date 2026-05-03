@@ -15,9 +15,9 @@ export async function POST(request: Request) {
       data: { name, email, message },
     })
 
-    // Send email to yousefhanafy325@gmail.com via FormSubmit.co
+    // Send email to yousef0hanafy123@gmail.com via FormSubmit.co
     try {
-      const emailRes = await fetch('https://formsubmit.co/ajax/yousefhanafy325@gmail.com', {
+      const emailRes = await fetch('https://formsubmit.co/ajax/yousef0hanafy123@gmail.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
