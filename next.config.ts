@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Include ws package for Neon PostgreSQL serverless driver on Vercel
+  serverExternalPackages: ["ws"],
 };
 
 export default nextConfig;

@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -24,18 +24,18 @@ model Skill {
 }
 
 model Project {
-  id        String   @id @default(cuid())
-  title     String
+  id          String   @id @default(cuid())
+  title       String
   description String
-  liveUrl   String   @default("")
-  githubUrl String   @default("")
-  imageUrl  String   @default("")
-  techStack String   @default("")
-  category  String   @default("mini-frontend")
-  featured  Boolean  @default(false)
-  order     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  liveUrl     String   @default("")
+  githubUrl   String   @default("")
+  imageUrl    String   @default("")
+  techStack   String   @default("")
+  category    String   @default("mini-frontend")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Experience {
