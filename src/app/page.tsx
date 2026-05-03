@@ -131,7 +131,10 @@ export default function Home() {
         })
       })
     })
-    mutationObserver.observe(document.body, { childList: true, subtree: true })
+    const target = document.getElementById('portfolio-content')
+    if (target) {
+      mutationObserver.observe(target, { childList: true, subtree: true })
+    }
 
     return () => {
       observer.disconnect()
@@ -192,8 +195,12 @@ export default function Home() {
     )
   }
 
+  if (adminOpen) {
+    return <AdminPanel isOpen={adminOpen} onClose={() => setAdminOpen(false)} />
+  }
+
   return (
-    <main className="min-h-screen flex flex-col">
+    <main id="portfolio-content" className="min-h-screen flex flex-col">
       <Navbar onAdminClick={() => setAdminOpen(true)} />
 
       <HeroSection />
@@ -208,8 +215,6 @@ export default function Home() {
       <div className="mt-auto">
         <Footer />
       </div>
-
-      <AdminPanel isOpen={adminOpen} onClose={() => setAdminOpen(false)} />
     </main>
   )
 }

@@ -207,11 +207,14 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
     <div className="fixed inset-0 z-[100] bg-background flex">
       {/* Sidebar */}
       <div className="hidden md:flex w-64 bg-card border-r border-border flex-col">
-        <div className="p-6 border-b border-border">
+        <div className="p-6 border-b border-border flex items-center justify-between">
           <h1 className="font-bold text-lg flex items-center gap-2">
             <Lock className="h-5 w-5 text-primary" />
             Admin Panel
           </h1>
+          <Button variant="ghost" size="icon" onClick={handleClose} className="h-8 w-8">
+            <X className="h-4 w-4" />
+          </Button>
         </div>
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 space-y-1">
