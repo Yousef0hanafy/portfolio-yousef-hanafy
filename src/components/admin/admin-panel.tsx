@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
@@ -30,6 +29,7 @@ import {
   ArrowDown,
   LogOut,
   Loader2,
+  Save,
 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
@@ -41,6 +41,18 @@ interface Experience { id: string; role: string; company: string; startDate: str
 interface Certification { id: string; title: string; issuer: string; date: string; score: string; order: number }
 interface Recommendation { id: string; name: string; role: string; company: string; text: string; avatarUrl: string; order: number }
 
+type TabId = 'dashboard' | 'siteinfo' | 'skills' | 'projects' | 'experience' | 'certifications' | 'recommendations'
+
+const SIDEBAR_TABS: { id: TabId; label: string; icon: typeof LayoutDashboard }[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'siteinfo', label: 'Site Info', icon: Settings },
+  { id: 'skills', label: 'Skills', icon: Code2 },
+  { id: 'projects', label: 'Projects', icon: FolderGit2 },
+  { id: 'experience', label: 'Experience', icon: Briefcase },
+  { id: 'certifications', label: 'Certifications', icon: Award },
+  { id: 'recommendations', label: 'Recommendations', icon: MessageSquareQuote },
+]
+
 interface AdminPanelProps {
   isOpen: boolean
   onClose: () => void
@@ -50,6 +62,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState<TabId>('dashboard')
 
   // Data
   const [siteInfo, setSiteInfo] = useState<SiteInfo[]>([])
@@ -169,6 +182,14 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
     setDeleteDialog({ open: false, type: '', id: '' })
   }
 
+  // Edit dialog helpers
+  const openEditDialog = (type: string, data: any) => {
+    setEditDialog({ open: true, type, data })
+  }
+  const closeEditDialog = () => {
+    setEditDialog({ open: false, type: '', data: null })
+  }
+
   // Login screen
   if (!authenticated) {
     return (
@@ -202,10 +223,320 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
     )
   }
 
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Dashboard Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                {[
+                  { label: 'Site Info', count: siteInfo.length, icon: Settings },
+                  { label: 'Skills', count: skills.length, icon: Code2 },
+                  { label: 'Projects', count: projects.length, icon: FolderGit2 },
+                  { label: 'Experience', count: experiences.length, icon: Briefcase },
+                  { label: 'Certifications', count: certifications.length, icon: Award },
+                  { label: 'Recommendations', count: recommendations.length, icon: MessageSquareQuote },
+                ].map((stat) => (
+                  <Card key={stat.label} className="border-primary/10">
+                    <CardContent className="p-4 text-center">
+                      <stat.icon className="h-5 w-5 text-primary mx-auto mb-2" />
+                      <p className="text-2xl font-bold text-primary">{stat.count}</p>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )
+
+      case 'siteinfo':
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Site Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {siteInfo.map((info) => (
+                <div key={info.key} className="grid sm:grid-cols-4 gap-3 items-start">
+                  <Label className="sm:col-span-1 pt-2 font-medium text-sm">{info.key}</Label>
+                  <div className="sm:col-span-2">
+                    {info.key === 'aboutText' ? (
+                      <Textarea
+                        value={info.value}
+                        onChange={async (e) => {
+                          const newVal = e.target.value
+                          setSiteInfo((prev) => prev.map((i) => i.key === info.key ? { ...i, value: newVal } : i))
+                          try {
+                            await fetch('/api/site-info', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: info.key, value: newVal }) })
+                          } catch { /* ignore */ }
+                        }}
+                        rows={3}
+                      />
+                    ) : (
+                      <Input
+                        value={info.value}
+                        onChange={async (e) => {
+                          const newVal = e.target.value
+                          setSiteInfo((prev) => prev.map((i) => i.key === info.key ? { ...i, value: newVal } : i))
+                          try {
+                            await fetch('/api/site-info', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: info.key, value: newVal }) })
+                          } catch { /* ignore */ }
+                        }}
+                      />
+                    )}
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="sm:col-span-1"
+                    onClick={async () => {
+                      await fetch('/api/site-info', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: info.key, value: info.value }) })
+                      toast({ title: 'Saved!' })
+                    }}
+                  >
+                    Save
+                  </Button>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )
+
+      case 'skills':
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Skills ({skills.length})</CardTitle>
+              <Button size="sm" onClick={() => openEditDialog('skills', null)}>
+                <Plus className="h-4 w-4 mr-1" /> Add Skill
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Level</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {skills.map((skill) => (
+                    <TableRow key={skill.id}>
+                      <TableCell className="font-medium">{skill.name}</TableCell>
+                      <TableCell><Badge variant="secondary">{skill.category}</Badge></TableCell>
+                      <TableCell>{skill.level}%</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('skills', skill.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('skills', skill.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog('skills', skill)}><Pencil className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'skills', id: skill.id })}><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        )
+
+      case 'projects':
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Projects ({projects.length})</CardTitle>
+              <Button size="sm" onClick={() => openEditDialog('projects', null)}>
+                <Plus className="h-4 w-4 mr-1" /> Add Project
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead className="hidden sm:table-cell">Category</TableHead>
+                    <TableHead className="hidden sm:table-cell">Tech Stack</TableHead>
+                    <TableHead className="hidden md:table-cell">Featured</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projects.map((project) => (
+                    <TableRow key={project.id}>
+                      <TableCell className="font-medium">{project.title}</TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <Badge variant="outline" className="text-xs capitalize">{project.category?.replace('-', ' ') || 'mini-frontend'}</Badge>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <div className="flex flex-wrap gap-1">
+                          {project.techStack.split(',').slice(0, 2).map((t) => (
+                            <Badge key={t.trim()} variant="outline" className="text-xs">{t.trim()}</Badge>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {project.featured ? <Badge>Featured</Badge> : '—'}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('projects', project.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('projects', project.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog('projects', project)}><Pencil className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'projects', id: project.id })}><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        )
+
+      case 'experience':
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Experience ({experiences.length})</CardTitle>
+              <Button size="sm" onClick={() => openEditDialog('experience', null)}>
+                <Plus className="h-4 w-4 mr-1" /> Add Experience
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Company</TableHead>
+                    <TableHead className="hidden sm:table-cell">Period</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {experiences.map((exp) => (
+                    <TableRow key={exp.id}>
+                      <TableCell className="font-medium">{exp.role}</TableCell>
+                      <TableCell>{exp.company}</TableCell>
+                      <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
+                        {exp.startDate} — {exp.current ? 'Present' : exp.endDate}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('experience', exp.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('experience', exp.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog('experience', exp)}><Pencil className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'experience', id: exp.id })}><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        )
+
+      case 'certifications':
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Certifications ({certifications.length})</CardTitle>
+              <Button size="sm" onClick={() => openEditDialog('certifications', null)}>
+                <Plus className="h-4 w-4 mr-1" /> Add Certification
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Issuer</TableHead>
+                    <TableHead className="hidden sm:table-cell">Date</TableHead>
+                    <TableHead className="hidden md:table-cell">Score</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {certifications.map((cert) => (
+                    <TableRow key={cert.id}>
+                      <TableCell className="font-medium">{cert.title}</TableCell>
+                      <TableCell>{cert.issuer}</TableCell>
+                      <TableCell className="hidden sm:table-cell">{cert.date}</TableCell>
+                      <TableCell className="hidden md:table-cell">{cert.score || '—'}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('certifications', cert.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('certifications', cert.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog('certifications', cert)}><Pencil className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'certifications', id: cert.id })}><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        )
+
+      case 'recommendations':
+        return (
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle>Recommendations ({recommendations.length})</CardTitle>
+              <Button size="sm" onClick={() => openEditDialog('recommendations', null)}>
+                <Plus className="h-4 w-4 mr-1" /> Add Recommendation
+              </Button>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead className="hidden sm:table-cell">Role</TableHead>
+                    <TableHead className="hidden md:table-cell">Text</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recommendations.map((rec) => (
+                    <TableRow key={rec.id}>
+                      <TableCell className="font-medium">{rec.name}</TableCell>
+                      <TableCell className="hidden sm:table-cell">{rec.role} at {rec.company}</TableCell>
+                      <TableCell className="hidden md:table-cell max-w-[200px] truncate text-muted-foreground text-sm">{rec.text}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('recommendations', rec.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('recommendations', rec.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEditDialog('recommendations', rec)}><Pencil className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'recommendations', id: rec.id })}><Trash2 className="h-3 w-3" /></Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        )
+
+      default:
+        return null
+    }
+  }
+
   // Admin panel
   return (
     <div className="fixed inset-0 z-[100] bg-background flex">
-      {/* Sidebar */}
+      {/* Sidebar - Desktop */}
       <div className="hidden md:flex w-64 bg-card border-r border-border flex-col">
         <div className="p-6 border-b border-border flex items-center justify-between">
           <h1 className="font-bold text-lg flex items-center gap-2">
@@ -216,31 +547,28 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
             <X className="h-4 w-4" />
           </Button>
         </div>
-        <div className="flex-1 overflow-y-auto">
+        <nav className="flex-1 overflow-y-auto">
           <div className="p-4 space-y-1">
-            {[
-              { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'siteinfo', label: 'Site Info', icon: Settings },
-              { id: 'skills', label: 'Skills', icon: Code2 },
-              { id: 'projects', label: 'Projects', icon: FolderGit2 },
-              { id: 'experience', label: 'Experience', icon: Briefcase },
-              { id: 'certifications', label: 'Certifications', icon: Award },
-              { id: 'recommendations', label: 'Recommendations', icon: MessageSquareQuote },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  const tabEl = document.querySelector(`[data-admin-tab="${tab.id}"]`) as HTMLElement
-                  tabEl?.click()
-                }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              >
-                <tab.icon className="h-4 w-4" />
-                {tab.label}
-              </button>
-            ))}
+            {SIDEBAR_TABS.map((tab) => {
+              const Icon = tab.icon
+              const isActive = activeTab === tab.id
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {tab.label}
+                </button>
+              )
+            })}
           </div>
-        </div>
+        </nav>
         <div className="p-4 border-t border-border">
           <Button variant="outline" onClick={handleLogout} className="w-full">
             <LogOut className="h-4 w-4 mr-2" />
@@ -260,7 +588,6 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Logout</span>
             </Button>
             <Button variant="ghost" size="icon" onClick={handleClose}>
               <X className="h-5 w-5" />
@@ -268,342 +595,32 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
           </div>
         </div>
 
-        <div className="md:hidden border-b border-border px-4">
-          <Button variant="ghost" size="sm" onClick={handleClose} className="hidden md:inline-flex ml-auto">
-            <X className="h-4 w-4 mr-1" />
-            Close
-          </Button>
+        {/* Mobile tab bar */}
+        <div className="md:hidden flex gap-1 p-2 border-b border-border overflow-x-auto">
+          {SIDEBAR_TABS.map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-colors ${
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {tab.label}
+              </button>
+            )
+          })}
         </div>
 
+        {/* Main content area */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-4 sm:p-6">
-            <Tabs defaultValue="dashboard" className="space-y-6">
-              <TabsList className="w-full flex md:hidden">
-                <TabsTrigger value="dashboard" data-admin-tab="dashboard">Dashboard</TabsTrigger>
-                <TabsTrigger value="siteinfo" data-admin-tab="siteinfo">Info</TabsTrigger>
-                <TabsTrigger value="skills" data-admin-tab="skills">Skills</TabsTrigger>
-              </TabsList>
-              <TabsList className="w-full flex md:hidden">
-                <TabsTrigger value="projects" data-admin-tab="projects">Projects</TabsTrigger>
-                <TabsTrigger value="experience" data-admin-tab="experience">Exp</TabsTrigger>
-                <TabsTrigger value="certifications" data-admin-tab="certifications">Certs</TabsTrigger>
-              </TabsList>
-              <TabsList className="w-full flex md:hidden">
-                <TabsTrigger value="recommendations" data-admin-tab="recommendations">Reco</TabsTrigger>
-              </TabsList>
-              <TabsList className="hidden md:w-full md:flex flex-wrap h-auto gap-1 p-1 bg-muted">
-                <TabsTrigger value="dashboard" data-admin-tab="dashboard" className="text-xs">Dashboard</TabsTrigger>
-                <TabsTrigger value="siteinfo" data-admin-tab="siteinfo" className="text-xs">Site Info</TabsTrigger>
-                <TabsTrigger value="skills" data-admin-tab="skills" className="text-xs">Skills</TabsTrigger>
-                <TabsTrigger value="projects" data-admin-tab="projects" className="text-xs">Projects</TabsTrigger>
-                <TabsTrigger value="experience" data-admin-tab="experience" className="text-xs">Experience</TabsTrigger>
-                <TabsTrigger value="certifications" data-admin-tab="certifications" className="text-xs">Certifications</TabsTrigger>
-                <TabsTrigger value="recommendations" data-admin-tab="recommendations" className="text-xs">Recommendations</TabsTrigger>
-              </TabsList>
-
-              {/* Dashboard */}
-              <TabsContent value="dashboard">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Dashboard Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                      {[
-                        { label: 'Site Info', count: siteInfo.length, icon: Settings },
-                        { label: 'Skills', count: skills.length, icon: Code2 },
-                        { label: 'Projects', count: projects.length, icon: FolderGit2 },
-                        { label: 'Experience', count: experiences.length, icon: Briefcase },
-                        { label: 'Certifications', count: certifications.length, icon: Award },
-                        { label: 'Recommendations', count: recommendations.length, icon: MessageSquareQuote },
-                      ].map((stat) => (
-                        <Card key={stat.label} className="border-primary/10">
-                          <CardContent className="p-4 text-center">
-                            <stat.icon className="h-5 w-5 text-primary mx-auto mb-2" />
-                            <p className="text-2xl font-bold text-primary">{stat.count}</p>
-                            <p className="text-xs text-muted-foreground">{stat.label}</p>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Site Info */}
-              <TabsContent value="siteinfo">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Site Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {siteInfo.map((info) => (
-                      <div key={info.key} className="grid sm:grid-cols-4 gap-3 items-start">
-                        <Label className="sm:col-span-1 pt-2 font-medium text-sm">{info.key}</Label>
-                        <div className="sm:col-span-2">
-                          {info.key === 'aboutText' ? (
-                            <Textarea
-                              value={info.value}
-                              onChange={async (e) => {
-                                const newVal = e.target.value
-                                setSiteInfo((prev) => prev.map((i) => i.key === info.key ? { ...i, value: newVal } : i))
-                                try {
-                                  await fetch('/api/site-info', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: info.key, value: newVal }) })
-                                } catch { /* ignore */ }
-                              }}
-                              rows={3}
-                            />
-                          ) : (
-                            <Input
-                              value={info.value}
-                              onChange={async (e) => {
-                                const newVal = e.target.value
-                                setSiteInfo((prev) => prev.map((i) => i.key === info.key ? { ...i, value: newVal } : i))
-                                try {
-                                  await fetch('/api/site-info', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: info.key, value: newVal }) })
-                                } catch { /* ignore */ }
-                              }}
-                            />
-                          )}
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="sm:col-span-1"
-                          onClick={async () => {
-                            await fetch('/api/site-info', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: info.key, value: info.value }) })
-                            toast({ title: 'Saved!' })
-                          }}
-                        >
-                          Save
-                        </Button>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Skills */}
-              <TabsContent value="skills">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Skills ({skills.length})</CardTitle>
-                    <Button size="sm" onClick={() => setEditDialog({ open: true, type: 'skills', data: null })}>
-                      <Plus className="h-4 w-4 mr-1" /> Add Skill
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead>Category</TableHead>
-                          <TableHead>Level</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {skills.map((skill) => (
-                          <TableRow key={skill.id}>
-                            <TableCell className="font-medium">{skill.name}</TableCell>
-                            <TableCell><Badge variant="secondary">{skill.category}</Badge></TableCell>
-                            <TableCell>{skill.level}%</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('skills', skill.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('skills', skill.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditDialog({ open: true, type: 'skills', data: skill })}><Pencil className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'skills', id: skill.id })}><Trash2 className="h-3 w-3" /></Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Projects */}
-              <TabsContent value="projects">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Projects ({projects.length})</CardTitle>
-                    <Button size="sm" onClick={() => setEditDialog({ open: true, type: 'projects', data: null })}>
-                      <Plus className="h-4 w-4 mr-1" /> Add Project
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Title</TableHead>
-                          <TableHead className="hidden sm:table-cell">Category</TableHead>
-                          <TableHead className="hidden sm:table-cell">Tech Stack</TableHead>
-                          <TableHead className="hidden md:table-cell">Featured</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {projects.map((project) => (
-                          <TableRow key={project.id}>
-                            <TableCell className="font-medium">{project.title}</TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <Badge variant="outline" className="text-xs capitalize">{project.category?.replace('-', ' ') || 'mini-frontend'}</Badge>
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell">
-                              <div className="flex flex-wrap gap-1">
-                                {project.techStack.split(',').slice(0, 2).map((t) => (
-                                  <Badge key={t.trim()} variant="outline" className="text-xs">{t.trim()}</Badge>
-                                ))}
-                              </div>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              {project.featured ? <Badge>Featured</Badge> : '—'}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('projects', project.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('projects', project.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditDialog({ open: true, type: 'projects', data: project })}><Pencil className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'projects', id: project.id })}><Trash2 className="h-3 w-3" /></Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Experience */}
-              <TabsContent value="experience">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Experience ({experiences.length})</CardTitle>
-                    <Button size="sm" onClick={() => setEditDialog({ open: true, type: 'experience', data: null })}>
-                      <Plus className="h-4 w-4 mr-1" /> Add Experience
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Role</TableHead>
-                          <TableHead>Company</TableHead>
-                          <TableHead className="hidden sm:table-cell">Period</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {experiences.map((exp) => (
-                          <TableRow key={exp.id}>
-                            <TableCell className="font-medium">{exp.role}</TableCell>
-                            <TableCell>{exp.company}</TableCell>
-                            <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">
-                              {exp.startDate} — {exp.current ? 'Present' : exp.endDate}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('experience', exp.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('experience', exp.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditDialog({ open: true, type: 'experience', data: exp })}><Pencil className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'experience', id: exp.id })}><Trash2 className="h-3 w-3" /></Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Certifications */}
-              <TabsContent value="certifications">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Certifications ({certifications.length})</CardTitle>
-                    <Button size="sm" onClick={() => setEditDialog({ open: true, type: 'certifications', data: null })}>
-                      <Plus className="h-4 w-4 mr-1" /> Add Certification
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Title</TableHead>
-                          <TableHead>Issuer</TableHead>
-                          <TableHead className="hidden sm:table-cell">Date</TableHead>
-                          <TableHead className="hidden md:table-cell">Score</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {certifications.map((cert) => (
-                          <TableRow key={cert.id}>
-                            <TableCell className="font-medium">{cert.title}</TableCell>
-                            <TableCell>{cert.issuer}</TableCell>
-                            <TableCell className="hidden sm:table-cell">{cert.date}</TableCell>
-                            <TableCell className="hidden md:table-cell">{cert.score || '—'}</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('certifications', cert.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('certifications', cert.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditDialog({ open: true, type: 'certifications', data: cert })}><Pencil className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'certifications', id: cert.id })}><Trash2 className="h-3 w-3" /></Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Recommendations */}
-              <TabsContent value="recommendations">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Recommendations ({recommendations.length})</CardTitle>
-                    <Button size="sm" onClick={() => setEditDialog({ open: true, type: 'recommendations', data: null })}>
-                      <Plus className="h-4 w-4 mr-1" /> Add Recommendation
-                    </Button>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Name</TableHead>
-                          <TableHead className="hidden sm:table-cell">Role</TableHead>
-                          <TableHead className="hidden md:table-cell">Text</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {recommendations.map((rec) => (
-                          <TableRow key={rec.id}>
-                            <TableCell className="font-medium">{rec.name}</TableCell>
-                            <TableCell className="hidden sm:table-cell">{rec.role} at {rec.company}</TableCell>
-                            <TableCell className="hidden md:table-cell max-w-[200px] truncate text-muted-foreground text-sm">{rec.text}</TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-1">
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('recommendations', rec.id, 'up')}><ArrowUp className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleReorder('recommendations', rec.id, 'down')}><ArrowDown className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setEditDialog({ open: true, type: 'recommendations', data: rec })}><Pencil className="h-3 w-3" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => setDeleteDialog({ open: true, type: 'recommendations', id: rec.id })}><Trash2 className="h-3 w-3" /></Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+            {renderTabContent()}
           </div>
         </div>
       </div>
@@ -613,7 +630,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
         open={editDialog.open}
         type={editDialog.type}
         data={editDialog.data}
-        onClose={() => setEditDialog({ open: false, type: '', data: null })}
+        onClose={closeEditDialog}
         onSaved={loadAllData}
       />
 
@@ -647,7 +664,7 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
   onSaved: () => void
 }) {
   const { toast } = useToast()
-  const [form, setForm] = useState<any>({})
+  const [form, setForm] = useState<Record<string, any>>({})
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -686,38 +703,47 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
     setSaving(true)
     try {
       const endpoint = getEndpoint()
-      const method = data ? 'PUT' : 'POST'
-      const body = data ? { id: data.id, ...form } : form
+      const isEdit = !!data
+      const body = isEdit ? { ...form } : { ...form }
 
       const res = await fetch(endpoint, {
-        method,
+        method: isEdit ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
 
       if (res.ok) {
-        toast({ title: data ? 'Updated!' : 'Created!' })
+        toast({ title: isEdit ? 'Updated!' : 'Created!' })
         onSaved()
         onClose()
       } else {
-        toast({ title: 'Failed', variant: 'destructive' })
+        const errorText = await res.text().catch(() => 'Unknown error')
+        toast({ title: 'Failed: ' + errorText, variant: 'destructive' })
       }
-    } catch {
-      toast({ title: 'Error', variant: 'destructive' })
+    } catch (err) {
+      toast({ title: 'Error saving', variant: 'destructive' })
     } finally {
       setSaving(false)
     }
   }
 
   const updateField = (key: string, value: any) => {
-    setForm((prev: any) => ({ ...prev, [key]: value }))
+    setForm((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const labelMap: Record<string, string> = {
+    skills: 'Skill',
+    projects: 'Project',
+    experience: 'Experience',
+    certifications: 'Certification',
+    recommendations: 'Recommendation',
   }
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{data ? 'Edit' : 'Add'} {type.slice(0, -1).replace('ie', 'y')}</DialogTitle>
+          <DialogTitle>{data ? 'Edit' : 'Add'} {labelMap[type] || type}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -733,7 +759,7 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
               </div>
               <div className="space-y-2">
                 <Label>Level (1-100)</Label>
-                <Input type="number" min={1} max={100} value={form.level || ''} onChange={(e) => updateField('level', parseInt(e.target.value) || 0)} />
+                <Input type="number" min={1} max={100} value={form.level ?? ''} onChange={(e) => updateField('level', parseInt(e.target.value) || 0)} />
               </div>
             </>
           )}
@@ -757,6 +783,10 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
                   <Label>GitHub URL</Label>
                   <Input value={form.githubUrl || ''} onChange={(e) => updateField('githubUrl', e.target.value)} />
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Image URL</Label>
+                <Input value={form.imageUrl || ''} onChange={(e) => updateField('imageUrl', e.target.value)} placeholder="/screenshots/my-project.webp" />
               </div>
               <div className="space-y-2">
                 <Label>Category</Label>
@@ -808,7 +838,7 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
               </div>
               <div className="flex items-center gap-2">
                 <Switch checked={form.current || false} onCheckedChange={(v) => updateField('current', v)} />
-                <Label>Current Position</Label>
+                <Label>Currently working here</Label>
               </div>
             </>
           )}
@@ -826,11 +856,11 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Date</Label>
-                  <Input value={form.date || ''} onChange={(e) => updateField('date', e.target.value)} />
+                  <Input value={form.date || ''} onChange={(e) => updateField('date', e.target.value)} placeholder="Jan 2026" />
                 </div>
                 <div className="space-y-2">
                   <Label>Score</Label>
-                  <Input value={form.score || ''} onChange={(e) => updateField('score', e.target.value)} />
+                  <Input value={form.score || ''} onChange={(e) => updateField('score', e.target.value)} placeholder="e.g. 95%" />
                 </div>
               </div>
             </>
@@ -838,9 +868,15 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
 
           {type === 'recommendations' && (
             <>
-              <div className="space-y-2">
-                <Label>Name</Label>
-                <Input value={form.name || ''} onChange={(e) => updateField('name', e.target.value)} />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Name</Label>
+                  <Input value={form.name || ''} onChange={(e) => updateField('name', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Avatar URL</Label>
+                  <Input value={form.avatarUrl || ''} onChange={(e) => updateField('avatarUrl', e.target.value)} placeholder="https://..." />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -856,18 +892,15 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
                 <Label>Recommendation Text</Label>
                 <Textarea rows={4} value={form.text || ''} onChange={(e) => updateField('text', e.target.value)} />
               </div>
-              <div className="space-y-2">
-                <Label>Avatar URL (optional)</Label>
-                <Input value={form.avatarUrl || ''} onChange={(e) => updateField('avatarUrl', e.target.value)} />
-              </div>
             </>
           )}
         </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave} disabled={saving} className="bg-primary hover:bg-primary/90">
+          <Button onClick={handleSave} disabled={saving}>
             {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Save className="h-4 w-4 mr-2" />
             {data ? 'Update' : 'Create'}
           </Button>
         </DialogFooter>
