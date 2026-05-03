@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Portfolio Preview</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #050505; color: #e5e5e5; padding: 40px 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
+h2 { text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+h2 span { color: #7c3aed; }
+.subtitle { text-align: center; color: #666; margin-bottom: 32px; font-size: 15px; }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap; justify-content: center; }
+.filter-btn { padding: 6px 18px; border-radius: 20px; border: 1px solid #333; background: transparent; color: #999; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+.filter-btn:hover { border-color: #7c3aed; color: #ccc; }
+.filter-btn.active { background: #4b2bab; color: white; border-color: #4b2bab; }
+.count { font-size: 10px; margin-left: 4px; opacity: 0.7; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card { border: 1px solid #1a1a1a; border-radius: 12px; overflow: hidden; background: #0a0a0a; transition: all 0.3s; }
+.card:hover { border-color: #333; transform: translateY(-2px); }
+.card-img { height: 176px; background: #111; overflow: hidden; position: relative; }
+.card-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 48px; color: #1a1a1a; font-weight: 700; }
+.card-body { padding: 16px; }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.card-title { font-weight: 700; font-size: 16px; line-height: 1.3; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+.badge-fullstack { background: rgba(75,43,171,0.15); color: #9b85e8; }
+.badge-big-frontend { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.badge-mini-frontend { background: rgba(34,197,94,0.15); color: #86efac; }
+.card-desc { color: #777; font-size: 13px; line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card-techs { display: flex; flex-wrap: wrap; gap: 4px; }
+.tech { padding: 2px 8px; border-radius: 6px; background: #151515; color: #888; font-size: 11px; }
+.empty { text-align: center; color: #444; padding: 60px 0; font-size: 16px; grid-column: 1 / -1; }
+</style>
+</head><body>
+<div class="container">
+  <h2>My <span>Projects</span></h2>
+  <p class="subtitle">A showcase of my recent work and side projects</p>
+  <div class="filter-bar"><button class="filter-btn" data-filter="all" onclick="render('all')">All <span class="count">12</span></button><button class="filter-btn" data-filter="fullstack" onclick="render('fullstack')">Fullstack <span class="count">1</span></button><button class="filter-btn" data-filter="big-frontend" onclick="render('big-frontend')">Big frontend <span class="count">6</span></button><button class="filter-btn" data-filter="mini-frontend" onclick="render('mini-frontend')">Mini frontend <span class="count">5</span></button></div>
+  <div class="grid" id="grid">
+    <div class="card" data-category="fullstack">
+      <div class="card-img">
+        <img src="projects/projects/performance-gym.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>P</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Performance Gym</div>
+          <span class="badge badge-fullstack">Fullstack</span>
+        </div>
+        <div class="card-desc">A comprehensive fitness platform built with Next.js and Supabase. Features user authentication, workout tracking, and a responsive modern UI with SSR capabilities.</div>
+        <div class="card-techs"><span class="tech">Next.js</span><span class="tech">Tailwind CSS</span><span class="tech">Supabase</span><span class="tech">REST APIs</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="big-frontend">
+      <div class="card-img">
+        <img src="projects/projects/nexdrive.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>N</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">NexDrive Car Marketplace</div>
+          <span class="badge badge-big-frontend">Big frontend</span>
+        </div>
+        <div class="card-desc">A car marketplace website featuring Swiper.js carousels, Google Maps API integration, JSON-LD structured data for SEO, and fully responsive design.</div>
+        <div class="card-techs"><span class="tech">Swiper.js</span><span class="tech">JavaScript</span><span class="tech">CSS3</span><span class="tech">Google Maps API</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="big-frontend">
+      <div class="card-img">
+        <img src="projects/projects/healio.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>H</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Healio Healthcare Platform</div>
+          <span class="badge badge-big-frontend">Big frontend</span>
+        </div>
+        <div class="card-desc">A healthcare platform built with React featuring CSS Grid layouts, ARIA accessibility, semantic HTML, and a polished dark/light theme system.</div>
+        <div class="card-techs"><span class="tech">React</span><span class="tech">CSS Grid</span><span class="tech">ARIA</span><span class="tech">Semantic HTML</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="big-frontend">
+      <div class="card-img">
+        <img src="projects/projects/dashboard.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>A</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Admin Dashboard</div>
+          <span class="badge badge-big-frontend">Big frontend</span>
+        </div>
+        <div class="card-desc">A feature-rich admin dashboard with HTML, CSS3, and JavaScript. Includes data tables, interactive charts, responsive sidebar navigation, and dynamic content.</div>
+        <div class="card-techs"><span class="tech">HTML</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">DOM</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="big-frontend">
+      <div class="card-img">
+        <img src="projects/projects/creator-compass.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>C</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Creator Compass</div>
+          <span class="badge badge-big-frontend">Big frontend</span>
+        </div>
+        <div class="card-desc">A creative resources website built with HTML, CSS3, and JavaScript. Features an image gallery, form validation, WCAG compliance, and accessible UI components.</div>
+        <div class="card-techs"><span class="tech">HTML</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">WCAG</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="mini-frontend">
+      <div class="card-img">
+        <img src="projects/projects/flyora.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>F</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Flyora</div>
+          <span class="badge badge-mini-frontend">Mini frontend</span>
+        </div>
+        <div class="card-desc">A flight booking website built with HTML, CSS3, Bootstrap, and JavaScript. Features a responsive design with interactive UI elements and smooth animations.</div>
+        <div class="card-techs"><span class="tech">HTML</span><span class="tech">CSS3</span><span class="tech">Bootstrap</span><span class="tech">JavaScript</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="mini-frontend">
+      <div class="card-img">
+        <img src="projects/projects/neuronexus.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>N</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">NeuroNexus</div>
+          <span class="badge badge-mini-frontend">Mini frontend</span>
+        </div>
+        <div class="card-desc">Interactive brain training memory game with countdown timer, leaderboard tracking, difficulty levels, and score system built with pure JavaScript.</div>
+        <div class="card-techs"><span class="tech">HTML5</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">DOM</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="mini-frontend">
+      <div class="card-img">
+        <img src="projects/projects/flowstate.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>F</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">FlowState</div>
+          <span class="badge badge-mini-frontend">Mini frontend</span>
+        </div>
+        <div class="card-desc">Multi-mode productivity timer app featuring stopwatch, countdown timer, and lap tracking with clean minimal interface.</div>
+        <div class="card-techs"><span class="tech">HTML5</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">DOM</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="mini-frontend">
+      <div class="card-img">
+        <img src="projects/projects/quotely.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>Q</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Quotely</div>
+          <span class="badge badge-mini-frontend">Mini frontend</span>
+        </div>
+        <div class="card-desc">Quote discovery app with random quote generator, favorites system, sharing functionality, and daily quote feature using external API integration.</div>
+        <div class="card-techs"><span class="tech">HTML5</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">REST API</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="mini-frontend">
+      <div class="card-img">
+        <img src="projects/projects/tuneflow.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>T</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">TuneFlow</div>
+          <span class="badge badge-mini-frontend">Mini frontend</span>
+        </div>
+        <div class="card-desc">Music player interface with playlist management, playback controls, progress tracking, and audio visualization built with modern CSS.</div>
+        <div class="card-techs"><span class="tech">HTML5</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">Web Audio API</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="big-frontend">
+      <div class="card-img">
+        <img src="projects/projects/willow-hide.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>W</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Willow & Hide</div>
+          <span class="badge badge-big-frontend">Big frontend</span>
+        </div>
+        <div class="card-desc">Multi-section leather goods business website with 6 pages: Home, Craft & Services, Gallery, Story, Offerings, and Contact with smooth scrolling navigation.</div>
+        <div class="card-techs"><span class="tech">HTML5</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">Multi-Page</span></div>
+      </div>
+    </div>
+    <div class="card" data-category="big-frontend">
+      <div class="card-img">
+        <img src="projects/projects/deskora.webp" onerror="this.parentElement.innerHTML='<div class=placeholder>D</div>'">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">Deskora</div>
+          <span class="badge badge-big-frontend">Big frontend</span>
+        </div>
+        <div class="card-desc">E-commerce product showcase website for desk accessories with hero section, product cards, featured items, testimonials, and responsive layout.</div>
+        <div class="card-techs"><span class="tech">HTML5</span><span class="tech">CSS3</span><span class="tech">JavaScript</span><span class="tech">E-commerce UI</span></div>
+      </div>
+    </div></div>
+</div>
+<script>
+function render(filter) {
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  let count = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const show = filter === 'all' || c.dataset.category === filter;
+    c.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  const grid = document.getElementById('grid');
+  const existing = grid.querySelector('.empty');
+  if (existing) existing.remove();
+  if (count === 0) {
+    const div = document.createElement('div');
+    div.className = 'empty';
+    div.textContent = 'No projects found in this category.';
+    grid.appendChild(div);
+  }
+}
+</script>
+</body></html>
