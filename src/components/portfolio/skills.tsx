@@ -5,12 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
   Code2,
-  Layout,
   Wrench,
-  Globe,
   Layers,
   Lightbulb,
-  Heart,
 } from 'lucide-react'
 
 interface Skill {
@@ -25,24 +22,20 @@ interface SkillsSectionProps {
   skills: Skill[]
 }
 
+const hiddenCategories = ['Web & APIs', 'Soft Skills', 'CSS & Layout']
+
 const categoryIcons: Record<string, React.ElementType> = {
   'Languages': Code2,
   'Frameworks': Layers,
   'Tools': Wrench,
-  'Web & APIs': Globe,
-  'CSS & Layout': Layout,
   'Concepts': Lightbulb,
-  'Soft Skills': Heart,
 }
 
 const categoryColors: Record<string, string> = {
   'Languages': 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
   'Frameworks': 'bg-green-500/10 text-green-600 dark:text-green-400',
   'Tools': 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-  'Web & APIs': 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
-  'CSS & Layout': 'bg-pink-500/10 text-pink-600 dark:text-pink-400',
   'Concepts': 'bg-teal-500/10 text-teal-600 dark:text-teal-400',
-  'Soft Skills': 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
 }
 
 export function SkillsSection({ skills }: SkillsSectionProps) {
@@ -62,12 +55,14 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
     return () => observer.disconnect()
   }, [])
 
-  // Group skills by category
-  const grouped = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = []
-    acc[skill.category].push(skill)
-    return acc
-  }, {})
+  // Group skills by category (exclude hidden categories)
+  const grouped = skills
+    .filter((skill) => !hiddenCategories.includes(skill.category))
+    .reduce<Record<string, Skill[]>>((acc, skill) => {
+      if (!acc[skill.category]) acc[skill.category] = []
+      acc[skill.category].push(skill)
+      return acc
+    }, {})
 
   const categories = Object.keys(grouped).sort()
 
