@@ -9,18 +9,19 @@ function createPrismaClient(): PrismaClient {
 
   // For PostgreSQL (Vercel/Neon deployment)
   if (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://')) {
-    // Dynamic imports for Neon adapter (tree-shaken in local dev)
     const { Pool, neonConfig } = require('@neondatabase/serverless')
     const { PrismaNeon } = require('@prisma/adapter-neon')
 
-    // Set WebSocket constructor for Neon in Node.js environment
     try {
       neonConfig.webSocketConstructor = require('ws')
-    } catch {
-      // ws not available - Neon will use native fetch in edge runtime
-    }
+    } catch {}
 
-    const pool = new Pool({ connectionString: databaseUrl })
+    // Clean connection string
+    const cleanUrl = databaseUrl
+      .replace(/channel_binding=[^&]*&?/g, '')
+      .replace(/[?&]$/, '')
+
+    const pool = new Pool({ connectionString: cleanUrl })
     const adapter = new PrismaNeon(pool)
 
     return new PrismaClient({ adapter } as any)
