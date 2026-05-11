@@ -15,17 +15,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Youssef Mahmoud Hanafy | Front-End Developer",
-  description: "Portfolio of Youssef Mahmoud Hanafy — Front-End Developer specializing in React, Next.js, and modern web technologies.",
-  keywords: ["Front-End Developer", "React", "Next.js", "Tailwind CSS", "Web Developer", "Youssef Hanafy"],
-  authors: [{ name: "Youssef Mahmoud Hanafy" }],
+  title: "Yousef Hanafy | Front-End Engineer",
+  description: "Portfolio of Yousef Hanafy — Front-End Engineer specializing in React, Next.js, and modern web technologies.",
+  keywords: ["Front-End Engineer", "Software Developer", "React", "Next.js", "Tailwind CSS", "Yousef Hanafy"],
+  authors: [{ name: "Yousef Hanafy" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    apple: "/H_Logo.avif",
   },
   openGraph: {
-    title: "Youssef Mahmoud Hanafy | Front-End Developer",
-    description: "Portfolio showcasing front-end development projects and skills.",
+    title: "Yousef Hanafy | Front-End Engineer",
+    description: "Portfolio showcasing advanced front-end engineering projects and systems design.",
     type: "website",
+    images: [
+      {
+        url: "/H_Logo.avif",
+        width: 800,
+        height: 600,
+      },
+    ],
   },
 };
 
