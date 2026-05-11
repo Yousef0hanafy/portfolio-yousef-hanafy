@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { GitBranch, TrendingUp, Award, Briefcase, GraduationCap } from 'lucide-react'
 
 interface AboutSectionProps {
@@ -87,11 +86,11 @@ export function AboutSection({ aboutText }: AboutSectionProps) {
         <div className="section-reveal grid lg:grid-cols-5 gap-10 items-center">
           {/* Avatar and Education */}
           <div className="lg:col-span-2 flex flex-col items-center text-center">
-            <Avatar className="h-40 w-40 mb-6 border-4 border-primary/20">
-              <AvatarFallback className="bg-primary/10 text-primary text-3xl font-bold">
-                YH
-              </AvatarFallback>
-            </Avatar>
+          <img 
+            src="/about-photo.webp"
+            alt="Youssef Hanafy"
+            className="h-40 w-40 mb-6 rounded-full object-cover border-4 border-primary/20 shadow-lg"
+          />
             <div className="flex items-center gap-2 text-muted-foreground">
               <GraduationCap className="h-4 w-4" />
               <span className="text-sm">
