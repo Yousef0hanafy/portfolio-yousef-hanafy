@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { GitBranch, TrendingUp, Award, Briefcase } from 'lucide-react'
+import { GitBranch, TrendingUp, Award, Briefcase, GraduationCap } from 'lucide-react'
 
 interface AboutSectionProps {
   aboutText: string
