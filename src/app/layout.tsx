@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   keywords: ["Front-End Engineer", "Software Developer", "React", "Next.js", "Tailwind CSS", "Yousef Hanafy"],
   authors: [{ name: "Yousef Hanafy" }],
   icons: {
+    icon: "/H_Logo.avif",
+    shortcut: "/H_Logo.avif",
     apple: "/H_Logo.avif",
   },
   openGraph: {
