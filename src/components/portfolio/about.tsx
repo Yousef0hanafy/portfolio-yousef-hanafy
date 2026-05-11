@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { GraduationCap, Code, FolderGit2, Trophy } from 'lucide-react'
+import { GitBranch, TrendingUp, Award, Briefcase } from 'lucide-react'
 
 interface AboutSectionProps {
   aboutText: string
@@ -51,10 +51,10 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 }
 
 const stats = [
-  { icon: FolderGit2, value: 15, suffix: '+', label: 'Projects' },
-  { icon: Code, value: 500, suffix: '+', label: 'Coding Hours' },
-  { icon: FolderGit2, value: 26, suffix: '+', label: 'Repositories' },
-  { icon: Trophy, value: 96, suffix: '%', label: 'Diploma Score' },
+  { icon: Briefcase, value: 20, suffix: '+', label: 'Projects' },
+  { icon: TrendingUp, value: 3, suffix: '+', label: 'Growth' },
+  { icon: GitBranch, value: 30, suffix: '+', label: 'Repositories' },
+  { icon: Award, value: 10, suffix: '+', label: 'Certificates' },
 ]
 
 export function AboutSection({ aboutText }: AboutSectionProps) {
