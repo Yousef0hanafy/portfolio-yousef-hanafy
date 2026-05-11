@@ -64,6 +64,7 @@ export function HeroSection() {
 
         <h1 className="animate-fade-in-up opacity-0 stagger-2 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
           Hi, I&apos;m{' '}
+          <img src="/H_Logo.avif" alt="H" className="inline-block w-8 h-8 rounded-full mr-2" />
           <span className="text-primary">Youssef</span>
         </h1>
 
@@ -93,10 +94,10 @@ export function HeroSection() {
             asChild
             className="w-full sm:w-auto px-8 py-6 text-base"
           >
-            <a href="/api/cv" target="_blank" rel="noopener noreferrer">
+            <a href="/Youssef-Hanafy-Resume.pdf" download>
               Download CV
               <Download className="ml-2 h-4 w-4" />
-            </a>
+            </a
           </Button>
         </div>
       </div>
