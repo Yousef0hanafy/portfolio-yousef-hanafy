@@ -24,9 +24,9 @@ interface ProjectsSectionProps {
 }
 
 const CATEGORY_CONFIG: Record<string, { label: string; color: string }> = {
-  'fullstack': { label: 'Fullstack', color: 'bg-[#4b2bab]/15 text-[#4b2bab] dark:text-[#9b85e8]' },
-  'big-frontend': { label: 'Big Frontend', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
-  'mini-frontend': { label: 'Mini Frontend', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
+  'fullstack': { label: 'Full Soltions', color: 'bg-[#4b2bab]/15 text-[#4b2bab] dark:text-[#9b85e8]' },
+  'big-frontend': { label: 'Interfaces', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
+  'mini-frontend': { label: 'Snippets', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
 }
 
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
