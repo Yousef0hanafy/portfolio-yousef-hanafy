@@ -636,7 +636,7 @@ export function AdminPanel({ isOpen, onClose }: AdminPanelProps) {
 
       {/* Delete Confirmation */}
       <AlertDialog open={deleteDialog.open} onOpenChange={(open) => !open && setDeleteDialog({ open: false, type: '', id: '' })}>
-        <AlertDialogContent>
+        <AlertDialogContent className="z-[200]">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Item</AlertDialogTitle>
             <AlertDialogDescription>
@@ -741,7 +741,7 @@ function EditDialog({ open, type, data, onClose, onSaved }: {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto z-[200]">
         <DialogHeader>
           <DialogTitle>{data ? 'Edit' : 'Add'} {labelMap[type] || type}</DialogTitle>
         </DialogHeader>
