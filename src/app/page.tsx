@@ -13,6 +13,7 @@ import { RecommendationsSection } from '@/components/portfolio/recommendations'
 import { ContactSection } from '@/components/portfolio/contact'
 import { Footer } from '@/components/portfolio/footer'
 import { AdminPanel } from '@/components/admin/admin-panel'
+import { WhatsAppButton } from '@/components/whatsapp-button'
 
 interface SiteInfo {
   siteTitle?: string
@@ -215,6 +216,7 @@ export default function Home() {
       <div className="mt-auto">
         <Footer />
       </div>
+      <WhatsAppButton />
     </main>
   )
 }
