@@ -97,7 +97,7 @@ export function HeroSection() {
             <a href="/Youssef-Hanafy-Resume.pdf" download>
               Download CV
               <Download className="ml-2 h-4 w-4" />
-            </a
+            </a>
           </Button>
         </div>
       </div>
